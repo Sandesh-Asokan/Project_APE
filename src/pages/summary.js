@@ -80,6 +80,8 @@ export default function Post() {
       stud: [
         { name: "Surya", mark: 78 },
         { name: "Manoj", mark: 81 },
+        { name: "Surya", mark: 78 },
+        { name: "Manoj", mark: 81 },
         { name: "Sandesh", mark: 99 },
         { name: "Sharwin", mark: 91 },
       ],
@@ -91,6 +93,8 @@ export default function Post() {
       stud: [
         { name: "Manoj", mark: 81 },
         { name: "Surya", mark: 78 },
+        { name: "Surya", mark: 78 },
+        { name: "Manoj", mark: 81 },
         { name: "Sandesh", mark: 99 },
         { name: "Sharwin", mark: 91 },
       ],
