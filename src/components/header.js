@@ -38,12 +38,14 @@ const data = [
     path: "/login",
     class: "border border-4 border-warning shadow rounded bg-primary",
   },
-  {
-    name: "Signup",
-    path: "/signup",
-    class: "border border-4 border-success shadow rounded bg-danger",
-  },
+  // {
+  //   name: "Signup",
+  //   path: "/signup",
+  //   class: "border border-4 border-success shadow rounded bg-danger",
+  // },
 ];
+
+
 
 function Header({ active, logged }) {
   return (
@@ -68,12 +70,12 @@ function Header({ active, logged }) {
           );
         })}
         {logged && (
-          <div  className="">
+          <div className="">
             <NavLink
               to="\upload"
               // className="bg-primary"
               className="px-3 py-2 rounded border border-white mx-3 text-decoration-none font-weight-bold"
-              style={{ backgroundColor: "#8800f7", color:"white" }}
+              style={{ backgroundColor: "#8800f7", color: "white" }}
             >
               Upload
             </NavLink>

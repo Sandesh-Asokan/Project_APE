@@ -3,6 +3,7 @@ import Header from "../components/header";
 import TextField from "@mui/material/TextField";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 // import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
 // import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
@@ -10,6 +11,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 export default function Due() {
   const [upload, setUpload] = useState(false);
   const [summary, setSummary] = useState(false);
+  const [ready, setReady] = useState(false);
   const [title, setTitle] = useState({});
   const [sum, setSum] = useState({});
   const recent = [
@@ -126,38 +128,145 @@ export default function Due() {
       ],
     },
   ];
-  const due = [
+  const [due, setDue] = useState([
     {
-      sub: "OOAD",
+      sub: "OOAD Assigment 3",
       task: "Assigment 3",
       date: 23,
-      Ques: [
-        "What is purpose of APE project?",
-        "Why Planet earth is rotating?",
-        "How would this project help us?",
+      qna: [
+        { id: 1, ques: "How would this project help us?", ans: [] },
+        { id: 2, ques: "What is purpose of APE project?", ans: [] },
+        { id: 3, ques: "Why Planet earth is rotating?", ans: [] },
       ],
     },
     {
-      sub: "CI",
+      sub: "CI Journal referencce",
       task: "Journal referencce",
       date: 2,
-      Ques: [
-        "Why Planet earth is rotating?",
-        "What is purpose of APE project?",
-        "How would this project help us?",
+      qna: [
+        { id: 1, ques: "How would this project help us?", ans: [] },
+        { id: 2, ques: "What is purpose of APE project?", ans: [] },
+        { id: 3, ques: "Why Planet earth is rotating?", ans: [] },
       ],
     },
     {
-      sub: "CGM",
+      sub: "CGM Weekly assesment",
       task: "Weekly assesment",
       date: 10,
-      Ques: [
-        "How would this project help us?",
-        "What is purpose of APE project?",
-        "Why Planet earth is rotating?",
+      qna: [
+        { id: 1, ques: "How would this project help us?", ans: [] },
+        { id: 2, ques: "What is purpose of APE project?", ans: [] },
+        { id: 3, ques: "Why Planet earth is rotating?", ans: [] },
       ],
     },
-  ];
+  ]);
+
+  const handleSubmit = () => {
+    const submitData = {
+      user: "Surya",
+      date: "Jun 9",
+      data: title,
+    };
+    console.log(submitData);
+    setReady(true);
+  };
+
+  const PreEvaluate = () => {
+    const [evaled, setEvaled] = useState(false);
+    const [load, setLoad] = useState(false);
+    const handleEvaluate = () => {
+      setEvaled(true);
+      setLoad(true);
+      setTimeout(() => {
+        setLoad(false);
+        // setEvaled(false);
+      }, 3000);
+    };
+
+    return (
+      <div
+        className="bg-white position-absolute"
+        style={{ minHeight: "100vh", left: 0, right: 0 }}
+      >
+        <ArrowBackIcon
+          className="bg-box1 purple rounded-circle p-1 me-3 mt-2 ms-3 cursor-pointer li-shadow col-1"
+          sx={{ fontSize: 30 }}
+          onClick={() => setReady(false)}
+        />
+        <div className="d-flex mt-2 col-12 justify-content-between align-items-center">
+          <div
+            className=" mx-3 mt-4 px-5 py-3 text-center bg-dark text-white h4 fw-bold br-10 li-shadow cursor-pointer"
+            // onClick={() => setPost(false)}
+          >
+            {title.sub}
+          </div>
+          {evaled ? (
+            load ? (
+              <LoadingButton loading variant="outlined">
+                Submit
+              </LoadingButton>
+            ) : (
+              <div
+                className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-success text-white br-10 li-shadow cursor-pointer"
+                // onClick={() => setPost(false)}
+              >
+                <span className=" h1 fw-bold"> Mark varum</span>
+              </div>
+            )
+          ) : (
+            <div
+              className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-warning text-white br-10 li-shadow cursor-pointer"
+              onClick={handleEvaluate}
+            >
+              <span className=" h1 fw-bold"> Evaluate </span>
+            </div>
+          )}
+          <div
+            className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger text-white br-10 li-shadow cursor-pointer"
+            // onClick={() => setPost(false)}
+          >
+            <span className=" h4 fw-bold"> {title.date} </span>
+          </div>
+        </div>
+        <div className=" col-12 row d-flex justify-content-evenly align-items-center">
+          {title.qna.map((ab, ind) => (
+            <div className="col-4 m-3 d-flex flex-column justify-content-center ">
+              <div className="br-15 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
+                <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
+                  <div className="me-2">
+                    {ab.id}. {ab.ques}
+                  </div>
+                </div>
+              </div>
+              <div className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box2 li-shadow cursor-pointer h4">
+                {ab.ans}
+                {evaled && (
+                  <div className="h3 fw-bold col-10 mx-auto bg-box4 p-2 li-shadow text-center mt-3 br-10">
+                    {/* {ab.mark} */}
+                    Mark podanum
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* <div className="d-flex mt-2 col-12 justify-content-center">
+        <div
+          className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger br-10 li-shadow cursor-pointer"
+          onClick={() => setUpload(false)}
+        >
+          Cancel
+        </div>
+        <div
+          className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-warning br-10 li-shadow cursor-pointer"
+          onClick={() => setUpload(false)}
+        >
+          Submit
+        </div>
+      </div> */}
+      </div>
+    );
+  };
 
   const Upload = () => (
     <div
@@ -169,7 +278,7 @@ export default function Due() {
           className=" mx-3 mt-4 px-5 py-3 text-center bg-dark text-white h4 fw-bold br-10 li-shadow cursor-pointer"
           // onClick={() => setPost(false)}
         >
-          {title.sub} - {title.task}
+          {title.sub}
         </div>
         <div
           className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger text-white br-10 li-shadow cursor-pointer"
@@ -179,16 +288,32 @@ export default function Due() {
         </div>
       </div>
       <div className=" col-12 row d-flex justify-content-evenly align-items-center">
-        {title.Ques.map((ab, ind) => (
+        {title.qna.map((ab, ind) => (
           <div className="col-4 m-3 d-flex flex-column justify-content-center ">
             <div className="br-15 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
               <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
                 <div className="me-2">
-                  {ind + 1}. {ab}
+                  {ab.id}. {ab.ques}
                 </div>
               </div>
             </div>
-            <div className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer h4">
+            <input
+              id={`img${ind}`}
+              type="file"
+              className="d-none"
+              accept="image/*"
+              onChange={(e) => {
+                let dum = title;
+                console.log(URL.createObjectURL(e.target.files[0]));
+                dum.qna[ind].ans.push(URL.createObjectURL(e.target.files[0]));
+                console.log(dum.qna[ind].ans);
+                setTitle(dum);
+              }}
+            />
+            <label
+              for={`img${ind}`}
+              className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer h4"
+            >
               {/* <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
               <div className="me-2">{ind + 1}.</div>
               <TextField
@@ -202,7 +327,7 @@ export default function Due() {
             </div> */}
               <UploadFileIcon className="mx-3" style={{ fontSize: 40 }} />{" "}
               Upload your answer
-            </div>
+            </label>
           </div>
         ))}
       </div>
@@ -215,7 +340,10 @@ export default function Due() {
         </div>
         <div
           className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-warning br-10 li-shadow cursor-pointer"
-          onClick={() => setUpload(false)}
+          onClick={() => {
+            handleSubmit();
+            setUpload(false);
+          }}
         >
           Submit
         </div>
@@ -294,6 +422,7 @@ export default function Due() {
       <Header />
       {upload && <Upload />}
       {summary && <Summary />}
+      {ready && <PreEvaluate />}
 
       <div className="py-3">
         <div className="p-3 h1 fw-bold mx-5">Due Assesment</div>
@@ -306,9 +435,7 @@ export default function Due() {
                 setTitle(du);
               }}
             >
-              <div className="h3 fw-bold cursor-pointer">
-                {du.sub} - {du.task}
-              </div>
+              <div className="h3 fw-bold cursor-pointer">{du.sub}</div>
               <div className="h5 fw-bold cursor-pointer">
                 <span className="text-danger h4 fw-bold">{du.date}</span> hrs
                 left
@@ -353,10 +480,3 @@ export default function Due() {
     </div>
   );
 }
-
-
-
-
-
-
-

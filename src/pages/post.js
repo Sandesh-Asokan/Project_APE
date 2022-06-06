@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/header";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -7,7 +7,11 @@ import TextField from "@mui/material/TextField";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+var idd = 1;
 export default function Post() {
   const details = [
     {
@@ -70,6 +74,15 @@ export default function Post() {
       { name: "Sandesh", mark: 99 },
     ],
   });
+  const [assName, setAssName] = useState("");
+  const [assDue, setAssDue] = useState("");
+  const [postData, setPostData] = useState([
+    {
+      id: 1,
+      ques: "",
+      words: "",
+    },
+  ]);
 
   const Summary = () => {
     console.log(data.stud);
@@ -146,37 +159,112 @@ export default function Post() {
     );
   };
 
+  const addQuest = () => {
+    const addObj = {
+      id: idd,
+      ques: "",
+      words: "",
+    };
+    setPostData([...postData, addObj]);
+  };
+
+  const handleSubmit = () => {
+    const submitData = {
+      assesName: assName,
+      assesDue: assDue,
+      qna: postData,
+    };
+    console.log(submitData);
+    reset();
+    setPost(false);
+  };
+
+  const reset = () => {
+    setPostData([
+      {
+        id: 1,
+        ques: "",
+        words: "",
+      },
+    ]);
+    setAssName("");
+    setAssDue("");
+    idd = 1;
+  };
+
+  // useEffect(() => console.log(array), [array]);
+  // useEffect(() => console.log(postData), [postData]);
+
   return (
     <div className="vh-100">
       <Header />
       {post ? (
         <div className="py-3">
-          <div className="p-3 h1 fw-bold mx-5">Post Assesment</div>
+          <div className="d-flex align-items-center">
+            <div className="p-3 h1 fw-bold mx-5">Post Assesment</div>
+            <input
+              // label="Enter the Assesment Name"
+              // variant="standard"
+              type="text"
+              className="mb-2 col-12 col-md-6 h3 p-2"
+              placeholder="Enter the Asssesment name"
+              style={{ border: "0px  solid white" }}
+              onChange={(e) => setAssName(e.target.value)}
+              // InputProps={{ style: { fontSize: 25 } }}
+              // InputLabelProps={{ style: { fontSize: 25, fontWeight: "bold" } }}
+            />
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="Set Due Date"
+                value={assDue}
+                onChange={(newValue) => {
+                  setAssDue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </div>
           <div className=" col-12 row d-flex justify-content-evenly align-items-center">
             {array.map((ab, ind) => (
               <div className="col-4 m-3">
                 <div className="br-15 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
                   <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
-                    <div className="me-2">{ind + 1}.</div>
+                    <div className="me-2">{ab}.</div>
                     <TextField
                       id="standard-basic"
                       label="Question"
                       variant="standard"
                       className="mb-2 col-10"
                       size="large"
+                      multiline
+                      rows={3}
+                      onChange={(e) => {
+                        let dum = [...postData];
+                        dum[ind].ques = e.target.value;
+                        // console.log(dum[ind].ques);
+                        setPostData(dum);
+                      }}
                       sx={{ fontSize: 50 }}
                     />
                   </div>
                 </div>
                 <div className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
                   <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
-                    <div className="me-2">{ind + 1}.</div>
+                    <div className="me-2">{ab}.</div>
                     <TextField
                       id="standard-basic"
                       label="Key"
                       variant="standard"
                       className="mb-2 col-10"
                       size="large"
+                      multiline
+                      rows={2}
+                      onChange={(e) => {
+                        let dum = [...postData];
+                        dum[ind].words = e.target.value;
+                        // console.log(dum[ind].ques);
+                        setPostData(dum);
+                      }}
                       sx={{ fontSize: 50 }}
                     />
                   </div>
@@ -187,8 +275,10 @@ export default function Post() {
           <div
             className="mx-auto m-3 br-15 col-2 py-3 px-4 d-flex flex-column align-items-center bg-box2 li-shadow cursor-pointer"
             onClick={() => {
-              setArray([...array, 1]);
-              console.log(array);
+              console.log(idd);
+              idd += 1;
+              setArray([...array, idd]);
+              addQuest();
             }}
           >
             <AddIcon style={{ fontSize: 30 }} />
@@ -217,13 +307,16 @@ export default function Post() {
           <div className="d-flex mt-2 col-12 justify-content-center">
             <div
               className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger br-10 li-shadow cursor-pointer"
-              onClick={() => setPost(false)}
+              onClick={() => {
+                reset();
+                setPost(false);
+              }}
             >
               Cancel
             </div>
             <div
               className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-warning br-10 li-shadow cursor-pointer"
-              onClick={() => setPost(false)}
+              onClick={handleSubmit}
             >
               Submit
             </div>
@@ -235,12 +328,12 @@ export default function Post() {
             <div className="p-3 h1 fw-bold mx-5">
               Recently Posted Assesments
             </div>
-            <div className="d-flex bg-box1 li-shadow br-15  px-3 mx-5 justify-content-center align-items-center">
+            <div
+              className="d-flex bg-box1 li-shadow br-15  px-3 mx-5 justify-content-center align-items-center cursor-pointer"
+              onClick={() => setPost(true)}
+            >
               <AddCircleOutlineIcon className="mb-2" style={{ fontSize: 40 }} />
-              <div
-                className="p-3 h2 fw-bold cursor-pointer"
-                onClick={() => setPost(true)}
-              >
+              <div className="p-3 h2 fw-bold" onClick={() => setPost(true)}>
                 Post Assesments
               </div>
             </div>
@@ -248,13 +341,13 @@ export default function Post() {
           <div className=" col-12 row d-flex justify-content-evenly">
             {details.map((sub, index) => (
               <div
-                className="br-15 col-4 py-3 px-4 m-4 d-flex flex-column align-items-center bg-box2 li-shadow"
+                className="br-15 col-4 py-3 px-4 m-4 d-flex flex-column align-items-center bg-box2 li-shadow cursor-pointer"
                 onClick={() => {
                   setSummary(true);
                   setData(sub);
                 }}
               >
-                <div className="h3 fw-bold cursor-pointer">
+                <div className="h3 fw-bold">
                   {index + 1}. {sub.sub} Question paper
                 </div>
                 {/* <UploadFileIcon className="" style={{ fontSize: 50 }} /> */}
