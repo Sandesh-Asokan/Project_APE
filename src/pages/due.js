@@ -167,6 +167,9 @@ export default function Due() {
       date: "Jun 9",
       data: title,
     };
+    // fetch("/recognise",title){
+    //   function block
+    // }
     console.log(submitData);
     setReady(true);
   };
@@ -177,6 +180,7 @@ export default function Due() {
     const handleEvaluate = () => {
       setEvaled(true);
       setLoad(true);
+
       setTimeout(() => {
         setLoad(false);
         // setEvaled(false);
