@@ -430,8 +430,6 @@
 //     </div>
 //   );
 // }
-<<<<<<< HEAD
-=======
 
 
 
@@ -813,4 +811,3 @@ export default function Post() {
     </div>
   );
 }
->>>>>>> ea73cb764817e192774d8cb9d16d8b7d24622a79
