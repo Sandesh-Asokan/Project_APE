@@ -1,0 +1,9 @@
+POST http://localhost:4000/app/signup
+Content-type: application/json
+
+{
+    "username": "Jass",
+    "email":"jayasurya.23it@licet.ac.in",
+    "password":"jassymaasy" 
+}
+
