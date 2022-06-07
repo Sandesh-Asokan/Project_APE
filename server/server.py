@@ -38,13 +38,13 @@ for i in range(len(uploads)):
 #  Members API Route
 @app.route("/recognised", methods=['GET','POST'])
 def members():
-    data = request.get_json()
+    # data = request.get_json()
 
-    uploads=data['ans']
+    # uploads=data['ans']
 
     return {
         "recognized_text": [recogText.replace('\n', ' ')],
-        "uploads" : uploads
+        # "uploads" : uploads
     }
     # value = request.args.get('key')
     

@@ -169,6 +169,21 @@ export default function Due() {
 
   // useEffect(() => console.log(recent), [recent]);
 
+  // useEffect(() => {
+  //   const ans = ["capto.png", "filename.png", "filename.jpg"];
+  //   // useEffect(() =>{
+  //   fetch("http://localhost:5000/recognised", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ ans }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((response) => console.log(response))
+  //     .catch((error) => console.log(error));
+  // });
+
   useEffect(() => {
     axios
       .get("http://localhost:4000/app/postAsses")
@@ -226,12 +241,15 @@ export default function Due() {
       date: "Jun 9",
       data: title,
     };
-    // fetch("/recognise",title){
-    //   function block
-    // }
-    //Test Start
 
-    const ans = ["capto.png", "filename.png", "filename.jpg"];
+    const ans = [
+      "capto.png",
+      "filename.png",
+      "filename.jpg",
+      "capto.png",
+      "filename.png",
+      "filename.jpg",
+    ];
     // useEffect(() =>{
     fetch("/recognised", {
       method: "POST",
@@ -249,6 +267,11 @@ export default function Due() {
         })
         .catch((err) => console.log(err))
     );
+    // fetch("/recognise",title){
+    //   function block
+    // }
+    //Test Start
+
     // )},[]);
 
     //Test End
@@ -403,8 +426,16 @@ export default function Due() {
               accept="image/*"
               onChange={(e) => {
                 let dum = title;
-                console.log(URL.createObjectURL(e.target.files[0]));
-                dum.qna[ind].ans.push(URL.createObjectURL(e.target.files[0]));
+                // console.log(URL.createObjectURL(e.target.files[0]));
+                let sample;
+                if (dum.qna[ind].ans) {
+                  sample = [...dum.qna[ind].ans];
+                } else {
+                  sample = [];
+                }
+                // sample.push(URL.createObjectURL(e.target.files[0]));
+                sample.push(e.target.files[0].name);
+                dum.qna[ind].ans = sample;
                 console.log(dum.qna[ind].ans);
                 setTitle(dum);
               }}
@@ -526,22 +557,23 @@ export default function Due() {
       <div className="py-3">
         <div className="p-3 h1 fw-bold mx-5">Due Assesment</div>
         <div className=" col-12 row d-flex justify-content-evenly">
-          {due && due.map((du) => (
-            <div
-              className=" br-15 col-4 m-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer"
-              onClick={() => {
-                setUpload(true);
-                setTitle(du);
-              }}
-            >
-              <div className="h3 fw-bold cursor-pointer">{du.assesName}</div>
-              <div className="h5 fw-bold cursor-pointer">
-                <span className="text-danger h4 fw-bold">{du.assesDue}</span>
-                 {/* hrs left */}
+          {due &&
+            due.map((du) => (
+              <div
+                className=" br-15 col-4 m-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer"
+                onClick={() => {
+                  setUpload(true);
+                  setTitle(du);
+                }}
+              >
+                <div className="h3 fw-bold cursor-pointer">{du.assesName}</div>
+                <div className="h5 fw-bold cursor-pointer">
+                  <span className="text-danger h4 fw-bold">{du.assesDue}</span>
+                  {/* hrs left */}
+                </div>
+                {/* <ArrowCircleRightIcon className="" style={{ fontSize: 50 }} /> */}
               </div>
-              {/* <ArrowCircleRightIcon className="" style={{ fontSize: 50 }} /> */}
-            </div>
-          ))}
+            ))}
         </div>
         {/* <div className=" mx-auto mt-4 py-3 text-center h4 fw-bold col-2 bg-warning rounded-10 li-shadow">
           Submit
