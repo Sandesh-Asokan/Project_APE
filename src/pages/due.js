@@ -14,6 +14,9 @@ export default function Due() {
   const [ready, setReady] = useState(false);
   const [title, setTitle] = useState({});
   const [sum, setSum] = useState({});
+  //Test// const [data, setData] = useState({
+  //   files: ""
+  // });
   const recent = [
     {
       sub: "OOAD",
@@ -303,6 +306,7 @@ export default function Due() {
             </div>
             <input
               id={`img${ind}`}
+              //Test// value={data.files}
               type="file"
               className="d-none"
               accept="image/*"
