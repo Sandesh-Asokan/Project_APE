@@ -242,28 +242,23 @@ export default function Due() {
       data: title,
     };
 
-    const ans = [
-      "capto.png",
-      "filename.png",
-      "filename.jpg",
-      "capto.png",
-      "filename.png",
-      "filename.jpg",
-    ];
+
+    const ans = ["capto.png", "filename.png", "filename.jpg","capto.png", "filename.png", "filename.jpg"];
+    const keys= ["VIKRAM" , "KAITHI" , "BETTER" , "THAN" ,"SANDESH" ,"Neptune","James"]
     // useEffect(() =>{
     fetch("/recognised", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ans }),
+      body: JSON.stringify({ ans,keys }),
     }).then((response) =>
       response
         .json()
         .then((data) => {
           console.log(data);
-          setData(data.recognised_text);
-          setData(data.uploads);
+          // setData(data.recognised_text);
+          // setData(data.uploads);
         })
         .catch((err) => console.log(err))
     );
