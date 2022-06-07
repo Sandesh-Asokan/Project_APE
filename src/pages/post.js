@@ -211,7 +211,7 @@ export default function Post() {
 
   return (
     <div className="vh-100">
-      <Header />
+      <Header logged={true} rout="Staff" />
       {post ? (
         <div className="py-3">
           <div className="d-flex align-items-center">

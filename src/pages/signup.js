@@ -41,8 +41,10 @@ function Signup() {
     const registered = {
       username: e.target.user.value,
       email: e.target.mail.value,
+      role: e.target.role.value,
       password: e.target.pass.value,
     };
+    console.log(registered);
 
     if (registered.username && registered.email && registered.password) {
       console.log("resssssssss");
@@ -193,7 +195,8 @@ function Signup() {
                     <div className="text-left col-12">Role</div>
                     <RadioGroup
                       // aria-labelledby="demo-controlled-radio-buttons-group"
-                      name="controlled-radio-buttons-group"
+                      // name="controlled-radio-buttons-group"
+                      name="role"
                       value={value}
                       onChange={handleChange1}
                       // className=" col-12 d-flex bg-white"

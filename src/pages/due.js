@@ -5,6 +5,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LoadingButton from "@mui/lab/LoadingButton";
 import axios from "axios";
+import { useSelector } from "react-redux";
 // import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
 // import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 
@@ -12,13 +13,29 @@ export default function Due() {
   const [upload, setUpload] = useState(false);
   const [summary, setSummary] = useState(false);
   const [ready, setReady] = useState(false);
-  const [load, setLoad] = useState(false);
+  const [load, setLoad] = useState(null);
   const [title, setTitle] = useState({});
   const [sum, setSum] = useState({});
   const [data, setData] = useState({});
   const [evaledData, setEvaledData] = useState({});
 
+  const { loggedIn, user, role } = useSelector((state) => state.user);
+
   const [due, setDue] = useState(null);
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   //   [
   //   {
   //     sub: "OOAD Assigment 3",
@@ -238,6 +255,12 @@ export default function Due() {
   }, [evaledData]);
 
   const handleSubmit = async () => {
+    // var err = 0;
+    // title.qna.map((ab, index) => {
+    //   if (ab.ans == [] || ab.ans) {
+    //     err = 1;
+    //   }
+    // });
     // {
     //     sub: "OOAD Assigment 3",
     //     task: "Assigment 3",
@@ -249,7 +272,7 @@ export default function Due() {
     //     ],
     //   },
     // console.log(title.qna[0])
-
+    // if (!err) {
     var total = 0;
     var qmarks = [];
     await title.qna.map(async (ab, index) => {
@@ -325,6 +348,7 @@ export default function Due() {
           console.log(res.data);
           setEvaledData(res.data);
           setReady(true);
+          setUpload(false);
           // console.log(res.data.message.msg);
           // console.log("Success back to back to back bro!");
           // if (res.data.message.result) window.location = "/";
@@ -334,6 +358,9 @@ export default function Due() {
           // setPass("");
         });
     }, 5000);
+    // } else {
+    //   window.alert("Please fill all answers");
+    // }
   };
 
   const PreEvaluate = () => {
@@ -349,6 +376,9 @@ export default function Due() {
     //   }, 3000);
     // };
 
+    const d = new Date(evaledData.data[0].assesDue);
+    const postedDate = d.getDate();
+    const postedMonth = months[d.getMonth()];
     return (
       <div
         className="bg-white position-absolute"
@@ -391,7 +421,9 @@ export default function Due() {
             className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger text-white br-10 li-shadow cursor-pointer"
             // onClick={() => setPost(false)}
           >
-            <span className=" h4 fw-bold"> {evaledData.data[0].assesDue} </span>
+            <span className=" h4 fw-bold">
+              {postedMonth + " " + postedDate}{" "}
+            </span>
           </div>
         </div>
         <div className=" col-12 row d-flex justify-content-evenly align-items-center">
@@ -434,148 +466,177 @@ export default function Due() {
     );
   };
 
-  const Upload = () => (
-    <div
-      className="bg-white position-absolute"
-      style={{ minHeight: "100vh", left: 0, right: 0 }}
-    >
-      <div className="d-flex mt-2 col-12 justify-content-between align-items-center">
-        <div
-          className=" mx-3 mt-4 px-5 py-3 text-center bg-dark text-white h4 fw-bold br-10 li-shadow cursor-pointer"
-          // onClick={() => setPost(false)}
-        >
-          {title.assesName}
+  const Upload = () => {
+    const d = new Date(title.assesDue);
+    const postedDate = d.getDate();
+    const postedMonth = months[d.getMonth()];
+    return (
+      <div
+        className="bg-white position-absolute"
+        style={{ minHeight: "100vh", left: 0, right: 0 }}
+      >
+        <div className="d-flex mt-2 col-12 justify-content-between align-items-center">
+          <div
+            className=" mx-3 mt-4 px-5 py-3 text-center bg-dark text-white h4 fw-bold br-10 li-shadow cursor-pointer"
+            // onClick={() => setPost(false)}
+          >
+            {title.assesName}
+          </div>
+          <div
+            className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger text-white br-10 li-shadow cursor-pointer"
+            // onClick={() => setPost(false)}
+          >
+            <span className=" h4 fw-bold">
+              {postedMonth + " " + postedDate}{" "}
+            </span>
+            {/* hrs left */}
+          </div>
         </div>
-        <div
-          className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger text-white br-10 li-shadow cursor-pointer"
-          // onClick={() => setPost(false)}
-        >
-          <span className=" h4 fw-bold"> {title.assesDue} </span>hrs left
-        </div>
-      </div>
-      <div className=" col-12 row d-flex justify-content-evenly align-items-center">
-        {title.qna.map((ab, ind) => (
-          <div className="col-4 m-3 d-flex flex-column justify-content-center ">
-            <div className="br-15 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
-              <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
-                <div className="me-2">
-                  {ab.id}. {ab.ques}
+        <div className=" col-12 row d-flex justify-content-evenly align-items-center">
+          {title.qna.map((ab, ind) => (
+            <div className="col-4 m-3 d-flex flex-column justify-content-center ">
+              <div className="br-15 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
+                <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
+                  <div className="me-2">
+                    {ab.id}. {ab.ques}
+                  </div>
                 </div>
               </div>
-            </div>
-            <input
-              id={`img${ind}`}
-              //Test// value={data.files}
-              type="file"
-              className="d-none"
-              accept="image/*"
-              onChange={(e) => {
-                let dum = title;
-                // console.log(URL.createObjectURL(e.target.files[0]));
-                let sample;
-                if (dum.qna[ind].ans) {
-                  sample = [...dum.qna[ind].ans];
-                } else {
-                  sample = [];
-                }
-                // sample.push(URL.createObjectURL(e.target.files[0]));
-                sample.push(e.target.files[0].name);
-                dum.qna[ind].ans = sample;
-                // console.log(dum.qna[ind].ans);
-                setTitle(dum);
-              }}
-            />
-            <label
-              for={`img${ind}`}
-              className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer h4"
-            >
-              {/* <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
-              <div className="me-2">{ind + 1}.</div>
-              <TextField
-                id="standard-basic"
-                label="Key"
-                variant="standard"
-                className="mb-2 col-10"
-                size="large"
-                sx={{ fontSize: 50 }}
+              <input
+                id={`img${ind}`}
+                //Test// value={data.files}
+                type="file"
+                className="d-none"
+                accept="image/*"
+                onChange={(e) => {
+                  let dum = title;
+                  // console.log(URL.createObjectURL(e.target.files[0]));
+                  let sample;
+                  if (dum.qna[ind].ans) {
+                    sample = [...dum.qna[ind].ans];
+                  } else {
+                    sample = [];
+                  }
+                  // sample.push(URL.createObjectURL(e.target.files[0]));
+                  sample.push(e.target.files[0].name);
+                  dum.qna[ind].ans = sample;
+                  // console.log(dum.qna[ind].ans);
+                  setTitle(dum);
+                  // let ar=title;
+                  // ;
+                  // setLoad(ar);
+                }}
               />
-            </div> */}
-              <UploadFileIcon className="mx-3" style={{ fontSize: 40 }} />{" "}
-              Upload your answer
-            </label>
+              {/* {title.qna[ind].ans ? (
+                <label
+                  for={`img${ind}`}
+                  className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer h4"
+                >
+                  <UploadFileIcon className="mx-3" style={{ fontSize: 10 }} />{" "}
+                  Upload your answer
+                </label>
+              ) : (
+                <label
+                  for={`img${ind}`}
+                  className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer h4"
+                >
+                  <UploadFileIcon className="mx-3" style={{ fontSize: 40 }} />{" "}
+                  Upload your answer
+                </label>
+              )} */}
+              <label
+                for={`img${ind}`}
+                className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer h4"
+              >
+                {
+                  // title.qna[ind].ans &&
+                  console.log(title.qna[ind])
+                  // load.map((fl, id) => (
+                  //   <div className="fw-bold bg-box4 br-10 li-shadow">{fl}</div>
+                  // ))
+                }
+                <UploadFileIcon className="mx-3" style={{ fontSize: 40 }} />{" "}
+                Upload your answer
+              </label>
+            </div>
+          ))}
+        </div>
+        <div className="d-flex mt-2 col-12 justify-content-center">
+          <div
+            className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger br-10 li-shadow cursor-pointer"
+            onClick={() => setUpload(false)}
+          >
+            Cancel
           </div>
-        ))}
-      </div>
-      <div className="d-flex mt-2 col-12 justify-content-center">
-        <div
-          className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger br-10 li-shadow cursor-pointer"
-          onClick={() => setUpload(false)}
-        >
-          Cancel
-        </div>
-        <div
-          className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-warning br-10 li-shadow cursor-pointer"
-          onClick={() => {
-            handleSubmit();
-            setUpload(false);
-          }}
-        >
-          Submit
+          <div
+            className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-warning br-10 li-shadow cursor-pointer"
+            onClick={() => {
+              handleSubmit();
+            }}
+          >
+            Submit
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
-  const Summary = () => (
-    <div
-      className="bg-white position-absolute"
-      style={{ minHeight: "100vh", left: 0, right: 0 }}
-    >
-      <ArrowBackIcon
-        className="bg-box1 purple rounded-circle p-1 me-3 mt-2 ms-3 cursor-pointer li-shadow col-1"
-        sx={{ fontSize: 30 }}
-        onClick={() => setSummary(false)}
-      />
-      <div className="d-flex mt-2 col-12 justify-content-between align-items-center">
-        <div
-          className=" mx-3 mt-4 px-5 py-3 text-center bg-dark text-white h4 fw-bold br-10 li-shadow cursor-pointer"
-          // onClick={() => setPost(false)}
-        >
-          {sum.data[0].assesName}
+  const Summary = () => {
+    const d = new Date(sum.data[0].assesDue);
+    const postedDate = d.getDate();
+    const postedMonth = months[d.getMonth()];
+    return (
+      <div
+        className="bg-white position-absolute"
+        style={{ minHeight: "100vh", left: 0, right: 0 }}
+      >
+        <ArrowBackIcon
+          className="bg-box1 purple rounded-circle p-1 me-3 mt-2 ms-3 cursor-pointer li-shadow col-1"
+          sx={{ fontSize: 30 }}
+          onClick={() => setSummary(false)}
+        />
+        <div className="d-flex mt-2 col-12 justify-content-between align-items-center">
+          <div
+            className=" mx-3 mt-4 px-5 py-3 text-center bg-dark text-white h4 fw-bold br-10 li-shadow cursor-pointer"
+            // onClick={() => setPost(false)}
+          >
+            {sum.data[0].assesName}
+          </div>
+          <div
+            className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-success text-white br-10 li-shadow cursor-pointer"
+            // onClick={() => setPost(false)}
+          >
+            <span className=" h1 fw-bold"> {sum.total} </span>
+          </div>
+          <div
+            className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger text-white br-10 li-shadow cursor-pointer"
+            // onClick={() => setPost(false)}
+          >
+            <span className=" h4 fw-bold">
+              {postedMonth + " " + postedDate}
+            </span>
+          </div>
         </div>
-        <div
-          className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-success text-white br-10 li-shadow cursor-pointer"
-          // onClick={() => setPost(false)}
-        >
-          <span className=" h1 fw-bold"> {sum.total} </span>
-        </div>
-        <div
-          className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger text-white br-10 li-shadow cursor-pointer"
-          // onClick={() => setPost(false)}
-        >
-          <span className=" h4 fw-bold"> {sum.data[0].assesDue} </span>
-        </div>
-      </div>
-      <div className=" col-12 row d-flex justify-content-evenly align-items-center">
-        {sum.data[0].qna.map((ab, ind) => (
-          <div className="col-4 m-3 d-flex flex-column justify-content-center ">
-            <div className="br-15 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
-              <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
-                <div className="me-2">
-                  {ind + 1}. {ab.ques}
+        <div className=" col-12 row d-flex justify-content-evenly align-items-center">
+          {sum.data[0].qna.map((ab, ind) => (
+            <div className="col-4 m-3 d-flex flex-column justify-content-center ">
+              <div className="br-15 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
+                <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
+                  <div className="me-2">
+                    {ind + 1}. {ab.ques}
+                  </div>
+                </div>
+              </div>
+              <div className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box2 li-shadow cursor-pointer h4">
+                {ab.ans}
+                <div className="h3 fw-bold col-10 mx-auto bg-box4 p-2 li-shadow text-center mt-3 br-10">
+                  {sum.marks[ind]}
                 </div>
               </div>
             </div>
-            <div className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box2 li-shadow cursor-pointer h4">
-              {ab.ans}
-              <div className="h3 fw-bold col-10 mx-auto bg-box4 p-2 li-shadow text-center mt-3 br-10">
-                {sum.marks[ind]}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      {/* <div className="d-flex mt-2 col-12 justify-content-center">
+          ))}
+        </div>
+        {/* <div className="d-flex mt-2 col-12 justify-content-center">
         <div
           className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger br-10 li-shadow cursor-pointer"
           onClick={() => setUpload(false)}
@@ -589,12 +650,13 @@ export default function Due() {
           Submit
         </div>
       </div> */}
-    </div>
-  );
+      </div>
+    );
+  };
 
   return (
     <div className="vh-100">
-      <Header />
+      <Header logged={true} rout="Student" />
       {upload && <Upload />}
       {summary && <Summary />}
       {ready && <PreEvaluate />}
@@ -603,22 +665,31 @@ export default function Due() {
         <div className="p-3 h1 fw-bold mx-5">Due Assesment</div>
         <div className=" col-12 row d-flex justify-content-evenly">
           {due &&
-            due.map((du) => (
-              <div
-                className=" br-15 col-4 m-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer"
-                onClick={() => {
-                  setUpload(true);
-                  setTitle(du);
-                }}
-              >
-                <div className="h3 fw-bold cursor-pointer">{du.assesName}</div>
-                <div className="h5 fw-bold cursor-pointer">
-                  <span className="text-danger h4 fw-bold">{du.assesDue}</span>
-                  {/* hrs left */}
+            due.map((du) => {
+              const d = new Date(du.assesDue);
+              const postedDate = d.getDate();
+              const postedMonth = months[d.getMonth()];
+              return (
+                <div
+                  className=" br-15 col-4 m-3 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer"
+                  onClick={() => {
+                    setUpload(true);
+                    setTitle(du);
+                  }}
+                >
+                  <div className="h3 fw-bold cursor-pointer">
+                    {du.assesName}
+                  </div>
+                  <div className="h5 fw-bold cursor-pointer">
+                    <span className="text-danger h4 fw-bold">
+                      {postedMonth + " " + postedDate}
+                    </span>
+                    {/* hrs left */}
+                  </div>
+                  {/* <ArrowCircleRightIcon className="" style={{ fontSize: 50 }} /> */}
                 </div>
-                {/* <ArrowCircleRightIcon className="" style={{ fontSize: 50 }} /> */}
-              </div>
-            ))}
+              );
+            })}
         </div>
         {/* <div className=" mx-auto mt-4 py-3 text-center h4 fw-bold col-2 bg-warning rounded-10 li-shadow">
           Submit

@@ -15,6 +15,7 @@ router.post("/signup", async (req, res, next) => {
   const signedUpUser = new signUpTemplateCopy({
     username: req.body.username,
     email: req.body.email,
+    role: req.body.role,
     password: securePassword,
   });
 
@@ -54,7 +55,7 @@ router.post("/signup", async (req, res, next) => {
 router.post("/login", (req, res, next) => {
   console.log("backend post received bro, don/'t' worry");
   signUpTemplateCopy
-    .findOne({ username: req.body.user })
+    .findOne({ username: req.body.user, role: req.body.role })
     .then((data) => {
       if (data) {
         bcrypt.compare(req.body.pass, data.password, function (err, result) {

@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../userSlice";
+import { useHistory } from "react-router-dom";
 
 const styles = {
   typography: {
@@ -28,11 +29,13 @@ function Login() {
   const [pass, setPass] = useState();
   const [teach, setTeach] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
   const handleSubmit = (e) => {
     e.preventDefault();
     const log = {
       user: user,
       pass: pass,
+      role: teach ? "teacher" : "student",
     };
 
     if (log.user && log.pass) {
@@ -49,10 +52,12 @@ function Login() {
         if (res.data.username) {
           console.log(res.data);
           console.log("Logged in Thalaiva!");
-          window.location = "/";
-          alert("Welcome " + res.data.username + "!");
+          // window.location = "/";
+          teach ? history.push("/post") : history.push("/due");
+          // alert("Welcome " + res.data.username + "!");
           setUser("");
           setPass("");
+          dispatch(login(dispatchData));
         } else {
           console.log(res.data);
           alert("Invalid Username/password!");
