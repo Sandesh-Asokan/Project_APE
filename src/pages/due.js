@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import TextField from "@mui/material/TextField";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
@@ -14,9 +14,11 @@ export default function Due() {
   const [ready, setReady] = useState(false);
   const [title, setTitle] = useState({});
   const [sum, setSum] = useState({});
-  //Test// const [data, setData] = useState({
-  //   files: ""
-  // });
+  //Test Start
+  const [data, setData] = useState({
+    files: ""
+  });
+  //Test End
   const recent = [
     {
       sub: "OOAD",
