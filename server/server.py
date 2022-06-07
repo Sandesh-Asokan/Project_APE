@@ -76,7 +76,7 @@ for i in range(len(uploads)):
 #  Members API Route
 @app.route("/recognised")
 def members():
-    return {"recognized text": [recogText.replace('\n', ' ')]}
+    return {"recognized_text": [recogText.replace('\n', ' ')]}
     # value = request.args.get('key')
 
 if __name__ == "__main__":
