@@ -6,6 +6,7 @@ const {
   submitAssesTemplate,
   submitAssesSchema,
 } = require("../models/StudentDataModel");
+const postAssesTemplate = require("../models/StaffDataModel");
 
 router.post("/signup", async (req, res, next) => {
   const saltPassword = await bcrypt.genSalt(10);
@@ -83,62 +84,42 @@ router.post("/login", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-router.post("/postAsses", async (req, res, next) => {
-  const saltPassword = await bcrypt.genSalt(10);
-  const securePassword = await bcrypt.hash(req.body.password, saltPassword);
-
-  const signedUpUser = new signUpTemplateCopy({
-    username: req.body.username,
-    email: req.body.email,
-    password: securePassword,
-  });
-
-  signUpTemplateCopy
-    .findOne({ email: req.body.email })
-    .then((data) => {
-      console.log(data);
-      if (data) {
-        console.log("user already exists!");
-        res.json({
-          message: {
-            msg: "The Email is already registered! Try with another email!",
-            result: false,
-          },
-        });
-      } else {
-        signedUpUser.save().then((data) => {
-          console.log("success!");
-          console.log(data);
-          res.json({
-            message: {
-              msg: "Successfully Signed Up as " + data.username,
-              result: true,
-            },
-          });
-        });
-      }
-    })
+router.get("/postAsses", async (req, res, next) => {
+  postAssesTemplate
+    .find()
+    // .findOne({ user: "Surya" })
+    .then(
+      (dish) => {
+        console.log("Found", dish);
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(dish);
+      },
+      (err) => next(err)
+    )
     .catch((err) => {
       res.json(err);
     });
-  (err) => {
-    next(err);
-  };
+});
+
+router.post("/postAsses", async (req, res, next) => {
+  postAssesTemplate
+    .create(req.body)
+    .then(
+      (dish) => {
+        console.log("Saved ", dish);
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(dish);
+      },
+      (err) => next(err)
+    )
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 router.post("/submitAsses", async (req, res, next) => {
-  // const saltPassword = await bcrypt.genSalt(10);
-  // const securePassword = await bcrypt.hash(req.body.password, saltPassword);
-
-  // const subAsses = new submitAssesTemplate(
-  //   req.body
-  //   //   {
-  //   //   user: req.body.user,
-  //   //   date: req.body.date,
-  //   //   data: req.body.data,
-  //   // }
-  // );
-
   submitAssesTemplate
     .create(req.body)
     .then(
@@ -150,50 +131,27 @@ router.post("/submitAsses", async (req, res, next) => {
       },
       (err) => next(err)
     )
-    .catch((err) =>{
+    .catch((err) => {
       res.json(err);
     });
+});
 
-  // const { error, value } = submitAssesSchema.validate(req.body);
-  // if (error) {
-  //   res.status(403);
-  //   res.json({ msg: "Bad Request" });
-  //   return;
-  // }
-
-  // console.log(subAsses);
-
-  // signUpTemplateCopy
-  //   .findOne({ email: req.body.email })
-  //   .then((data) => {
-  //     console.log(data);
-  //     if (data) {
-  //       console.log("user already exists!");
-  //       res.json({
-  //         message: {
-  //           msg: "The Email is already registered! Try with another email!",
-  //           result: false,
-  //         },
-  //       });
-  //     } else {
-  //       signedUpUser.save().then((data) => {
-  //         console.log("success!");
-  //         console.log(data);
-  //         res.json({
-  //           message: {
-  //             msg: "Successfully Signed Up as " + data.username,
-  //             result: true,
-  //           },
-  //         });
-  //       });
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     res.json(err);
-  //   });
-  // (err) => {
-  //   next(err);
-  // };
+router.get("/submitAsses", async (req, res, next) => {
+  submitAssesTemplate
+    .find()
+    // .findOne({ user: "Surya" })
+    .then(
+      (dish) => {
+        // console.log("Found", dish);
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(dish);
+      },
+      (err) => next(err)
+    )
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 module.exports = router;

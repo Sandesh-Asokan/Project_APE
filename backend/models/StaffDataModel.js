@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 
+const qnaSchema = new mongoose.Schema({
+        id: Number,
+        ques: String,
+        words: String,
+      })
+
 const postAssesTemplate = new mongoose.Schema({
   assesName: String,
   assesDue: String,
-  //   qna: [
-  //     {
-  //       id: 1,
-  //       ques: "",
-  //       words: "",
-  //     },
-  //   ],
+  qna: [qnaSchema],
 
   //   username: {
   //     type: String,

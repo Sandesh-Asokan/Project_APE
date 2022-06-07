@@ -5,6 +5,8 @@ import bghome1 from "../assets/stdlog.jpg";
 import { Box, Grid, TextField, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../userSlice";
 
 const styles = {
   typography: {
@@ -22,15 +24,27 @@ const styles = {
 };
 
 function Login() {
+  const [user, setUser] = useState();
+  const [pass, setPass] = useState();
+  const [teach, setTeach] = useState(false);
+  const dispatch = useDispatch();
   const handleSubmit = (e) => {
     e.preventDefault();
-    const login = {
+    const log = {
       user: user,
       pass: pass,
     };
 
-    if (login.user && login.pass) {
-      axios.post("http://localhost:4000/app/login", login).then((res) => {
+    if (log.user && log.pass) {
+      const dispatchData = {
+        user: log.user,
+        role: teach ? "Teacher" : "Student",
+        password: log.pass,
+        loggedIn: true,
+      };
+      dispatch(login(dispatchData));
+
+      axios.post("http://localhost:4000/app/login", log).then((res) => {
         console.log(res.data);
         if (res.data.username) {
           console.log(res.data);
@@ -48,10 +62,6 @@ function Login() {
       alert("Some fields are empty!");
     }
   };
-
-  const [user, setUser] = useState();
-  const [pass, setPass] = useState();
-  const [teach, setTeach] = useState(false);
 
   return (
     <div

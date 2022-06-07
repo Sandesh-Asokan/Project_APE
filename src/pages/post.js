@@ -10,6 +10,7 @@ import Modal from "@mui/material/Modal";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import axios from "axios";
 
 var idd = 1;
 export default function Post() {
@@ -85,7 +86,7 @@ export default function Post() {
   ]);
 
   const Summary = () => {
-    console.log(data.stud);
+    // console.log(data.stud);
     return (
       <>
         <Modal
@@ -174,7 +175,20 @@ export default function Post() {
       assesDue: assDue,
       qna: postData,
     };
-    console.log(submitData);
+    axios
+      .post("http://localhost:4000/app/postAsses", submitData)
+      .then((res) => {
+        console.log(res.data);
+        // console.log(res.data.message.msg);
+        // console.log("Success back to back to back bro!");
+        // if (res.data.message.result) window.location = "/";
+        // alert(res.data.message.msg);
+        // setUser("");
+        // setMail("");
+        // setPass("");
+      })
+      .catch((err) => console.log(err));
+    // console.log(submitData);
     reset();
     setPost(false);
   };
