@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LoadingButton from "@mui/lab/LoadingButton";
-
+import axios from "axios";
 // import KeyboardDoubleArrowRightOutlinedIcon from "@mui/icons-material/KeyboardDoubleArrowRightOutlined";
 // import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 
@@ -171,6 +171,18 @@ export default function Due() {
     //   function block
     // }
     console.log(submitData);
+    axios
+      .post("http://localhost:4000/app/submitAsses", submitData)
+      .then((res) => {
+        // console.log(res.data);
+        // console.log(res.data.message.msg);
+        // console.log("Success back to back to back bro!");
+        // if (res.data.message.result) window.location = "/";
+        // alert(res.data.message.msg);
+        // setUser("");
+        // setMail("");
+        // setPass("");
+      });
     setReady(true);
   };
 
