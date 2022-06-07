@@ -16,6 +16,7 @@ export default function Due() {
   const [title, setTitle] = useState({});
   const [sum, setSum] = useState({});
   const [data, setData] = useState({});
+  const [evaledData, setEvaledData] = useState({});
 
   const [due, setDue] = useState(null);
   //   [
@@ -210,17 +211,18 @@ export default function Due() {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => console.log(recent), [recent]);
   useEffect(() => {
     axios
       .get("http://localhost:4000/app/submitAsses")
       .then((res) => {
-        console.log(res.data);
-        let dumData = [];
-        let dum = res.data;
-        dum.forEach((dum) => {
-          dumData.push(...dum.data);
-        });
-        setRecent(dumData);
+        // console.log(res.data);
+        // let dumData = [];
+        // let dum = res.data;
+        // dum.forEach((dum) => {
+        //   dumData.push(...dum.data);
+        // });
+        setRecent(res.data);
         // console.log(recent);
         // setRecent(res.data);
         // setLoad(true);
@@ -233,9 +235,9 @@ export default function Due() {
         // setPass("");
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [evaledData]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // {
     //     sub: "OOAD Assigment 3",
     //     task: "Assigment 3",
@@ -247,7 +249,10 @@ export default function Due() {
     //     ],
     //   },
     // console.log(title.qna[0])
-    title.qna.forEach((ab) => {
+
+    var total = 0;
+    var qmarks = [];
+    await title.qna.map(async (ab, index) => {
       console.log(ab.ans);
       // const ans = [
       //   "capto.png",
@@ -269,7 +274,7 @@ export default function Due() {
       // useEffect(() =>{
       const answer = ab.ans;
       const keywords = ab.words;
-      fetch("/recognised", {
+      await fetch("/recognised", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -280,18 +285,22 @@ export default function Due() {
           .json()
           .then((data) => {
             console.log(ab.id, data);
+            qmarks.push(data.marks);
+            // dumm.qna[i].mark = data.marks;
+            total += data.marks;
+            let dumm = title;
+            dumm.qna[index].ans = data.recognized_text;
+            setTitle(dumm);
             // setData(data.recognised_text);
             // setData(data.uploads);
           })
           .catch((err) => console.log(err))
       );
     });
-    const submitData = {
-      user: "Surya",
-      date: "Jun 9",
-      data: title,
-    };
+    setTimeout(() => console.log(total, qmarks), 2000);
 
+    // setTimeout(() => console.log(submitData), 4000);
+    // console.log(submitData);
     // fetch("/recognise",title){
     //   function block
     // }
@@ -301,33 +310,44 @@ export default function Due() {
 
     //Test End
     // console.log(submitData);
-    // axios
-    //   .post("http://localhost:4000/app/submitAsses", submitData)
-    //   .then((res) => {
-    //     // console.log(res.data);
-    //     // console.log(res.data.message.msg);
-    //     // console.log("Success back to back to back bro!");
-    //     // if (res.data.message.result) window.location = "/";
-    //     // alert(res.data.message.msg);
-    //     // setUser("");
-    //     // setMail("");
-    //     // setPass("");
-    //   });
-    setReady(true);
+    setTimeout(async () => {
+      const submitData = {
+        user: "Surya",
+        date: "Jun 9",
+        total,
+        marks: qmarks,
+        data: title,
+      };
+      console.log(title);
+      await axios
+        .post("http://localhost:4000/app/submitAsses", submitData)
+        .then((res) => {
+          console.log(res.data);
+          setEvaledData(res.data);
+          setReady(true);
+          // console.log(res.data.message.msg);
+          // console.log("Success back to back to back bro!");
+          // if (res.data.message.result) window.location = "/";
+          // alert(res.data.message.msg);
+          // setUser("");
+          // setMail("");
+          // setPass("");
+        });
+    }, 5000);
   };
 
   const PreEvaluate = () => {
     const [evaled, setEvaled] = useState(false);
     const [load, setLoad] = useState(false);
-    const handleEvaluate = () => {
-      setEvaled(true);
-      setLoad(true);
+    // const handleEvaluate = () => {
+    //   setEvaled(true);
+    //   setLoad(true);
 
-      setTimeout(() => {
-        setLoad(false);
-        // setEvaled(false);
-      }, 3000);
-    };
+    //   setTimeout(() => {
+    //     setLoad(false);
+    //     // setEvaled(false);
+    //   }, 3000);
+    // };
 
     return (
       <div
@@ -344,38 +364,38 @@ export default function Due() {
             className=" mx-3 mt-4 px-5 py-3 text-center bg-dark text-white h4 fw-bold br-10 li-shadow cursor-pointer"
             // onClick={() => setPost(false)}
           >
-            {title.sub}
+            {evaledData.data[0].assesName}
           </div>
-          {evaled ? (
+          {/* {evaled ? (
             load ? (
               <LoadingButton loading variant="outlined">
                 Submit
               </LoadingButton>
-            ) : (
-              <div
-                className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-success text-white br-10 li-shadow cursor-pointer"
-                // onClick={() => setPost(false)}
-              >
-                <span className=" h1 fw-bold"> Mark varum</span>
-              </div>
-            )
+            ) : ( */}
+          <div
+            className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-success text-white br-10 li-shadow cursor-pointer"
+            // onClick={() => setPost(false)}
+          >
+            <span className=" h1 fw-bold"> {evaledData.total}</span>
+          </div>
+          {/* )
           ) : (
             <div
               className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-warning text-white br-10 li-shadow cursor-pointer"
-              onClick={handleEvaluate}
+              // onClick={handleEvaluate}
             >
               <span className=" h1 fw-bold"> Evaluate </span>
             </div>
-          )}
+          )} */}
           <div
             className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger text-white br-10 li-shadow cursor-pointer"
             // onClick={() => setPost(false)}
           >
-            <span className=" h4 fw-bold"> {title.date} </span>
+            <span className=" h4 fw-bold"> {evaledData.data[0].assesDue} </span>
           </div>
         </div>
         <div className=" col-12 row d-flex justify-content-evenly align-items-center">
-          {title.qna.map((ab, ind) => (
+          {evaledData.data[0].qna.map((ab, ind) => (
             <div className="col-4 m-3 d-flex flex-column justify-content-center ">
               <div className="br-15 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
                 <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
@@ -386,12 +406,12 @@ export default function Due() {
               </div>
               <div className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box2 li-shadow cursor-pointer h4">
                 {ab.ans}
-                {evaled && (
-                  <div className="h3 fw-bold col-10 mx-auto bg-box4 p-2 li-shadow text-center mt-3 br-10">
-                    {/* {ab.mark} */}
-                    Mark podanum
-                  </div>
-                )}
+                {/* {evaled && ( */}
+                <div className="h3 fw-bold col-10 mx-auto bg-box4 p-2 li-shadow text-center mt-3 br-10">
+                  {/* {ab.mark} */}
+                  {evaledData.marks[ind]}
+                </div>
+                {/* )} */}
               </div>
             </div>
           ))}
@@ -521,23 +541,23 @@ export default function Due() {
           className=" mx-3 mt-4 px-5 py-3 text-center bg-dark text-white h4 fw-bold br-10 li-shadow cursor-pointer"
           // onClick={() => setPost(false)}
         >
-          {sum.sub} - {sum.task}
+          {sum.data[0].assesName}
         </div>
         <div
           className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-success text-white br-10 li-shadow cursor-pointer"
           // onClick={() => setPost(false)}
         >
-          <span className=" h1 fw-bold"> {sum.mark} </span>
+          <span className=" h1 fw-bold"> {sum.total} </span>
         </div>
         <div
           className=" mx-3 mt-4 py-3 text-center h4 fw-bold col-2 bg-danger text-white br-10 li-shadow cursor-pointer"
           // onClick={() => setPost(false)}
         >
-          <span className=" h4 fw-bold"> {sum.date} </span>
+          <span className=" h4 fw-bold"> {sum.data[0].assesDue} </span>
         </div>
       </div>
       <div className=" col-12 row d-flex justify-content-evenly align-items-center">
-        {sum.qna.map((ab, ind) => (
+        {sum.data[0].qna.map((ab, ind) => (
           <div className="col-4 m-3 d-flex flex-column justify-content-center ">
             <div className="br-15 py-3 px-4 d-flex flex-column align-items-center bg-box1 li-shadow cursor-pointer">
               <div className="h3 fw-bold cursor-pointer d-flex align-items-center col-12 justify-content-center">
@@ -549,7 +569,7 @@ export default function Due() {
             <div className="br-15 mt-3 py-3 px-4 d-flex flex-column align-items-center bg-box2 li-shadow cursor-pointer h4">
               {ab.ans}
               <div className="h3 fw-bold col-10 mx-auto bg-box4 p-2 li-shadow text-center mt-3 br-10">
-                {ab.mark}
+                {sum.marks[ind]}
               </div>
             </div>
           </div>
@@ -620,13 +640,13 @@ export default function Due() {
                   }}
                 >
                   <div className="h3 fw-bold py-3 mb-0 cursor-pointer text-center">
-                    {index + 1}. {rc.sub}
+                    {index + 1}. {rc.data[0].assesName}
                   </div>
                   <div
                     className="h3 fw-bold my-2 bg-box4 py-3 li-shadow px-5"
                     style={{ borderRadius: "10px 0px 0px 10px" }}
                   >
-                    {rc.mark}
+                    {rc.total}
                   </div>
                   {/* <UploadFileIcon className="" style={{ fontSize: 50 }} /> */}
                 </div>

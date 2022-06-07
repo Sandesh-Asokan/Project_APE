@@ -3,18 +3,20 @@ const mongoose = require("mongoose");
 const qnaSchema = new mongoose.Schema({
   id: Number,
   ques: String,
-  ans: [String],
+  ans: String,
 });
 const assesDetailsSchema = new mongoose.Schema({
-  sub: String,
-  task: String,
-  date: Date,
+  assesName: String,
+  // task: String,
+  assesDue: Date,
   qna: [qnaSchema],
 });
 
 const submitAssesTemplate = new mongoose.Schema({
   user: String,
   date: Date,
+  marks: [Number],
+  total: Number,
   data: [assesDetailsSchema],
   // {
   //   sub: "CGM Weekly assesment",
@@ -32,4 +34,3 @@ module.exports = {
   submitAssesTemplate: mongoose.model("student-data", submitAssesTemplate),
   submitAssesSchema: submitAssesTemplate,
 };
-

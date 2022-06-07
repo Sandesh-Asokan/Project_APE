@@ -47,7 +47,7 @@ def members():
     marks = mark * 5
 
     return {
-        "recognized_text": [recogText.replace('\n','')],
+        "recognized_text": recogText.replace('\n',''),
         "upload" : upload,
         "keys" : keys.split(','),
         "marks" : marks
