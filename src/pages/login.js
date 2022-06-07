@@ -154,7 +154,7 @@ function Login() {
                     </div>
                     <Typography
                       style={styles.typography}
-                      variant="h5"
+                      variant="h6"
                       sx={{ mb: 4 }}
                     >
                       Login

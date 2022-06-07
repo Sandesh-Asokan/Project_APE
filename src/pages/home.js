@@ -95,11 +95,11 @@ function Home() {
                 <Box
                   className="h4 d-flex align-justify-center"
                   sx={{
-                    width: 700,
-                    height: 300,
+                    width: 600,
+                    height: 175,
                     backgroundColor: "primary",
-                    borderTopLeftRadius: "25%",
-                    borderBottomRightRadius: "25%",
+                    borderTopLeftRadius: "10%",
+                    borderBottomRightRadius: "10%",
                     color: "green",
                     fontWeight: "bold",
                     border: "5px solid green",
@@ -108,7 +108,7 @@ function Home() {
 
                     "&:hover": {
                       border: "5px solid white",
-                      transition: "0.5s ease-in-out",
+                      transition: "0.9s ease-in-out",
                     },
                   }}
                   spacing={1}
