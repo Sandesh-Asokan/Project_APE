@@ -14,19 +14,8 @@ export default function Due() {
   const [ready, setReady] = useState(false);
   const [title, setTitle] = useState({});
   const [sum, setSum] = useState({});
-  //Test Start
-  const [data, setData] = useState([{}])
+  const [data, setData] = useState({})
 
-  useEffect(() =>{
-    fetch("/recognised")
-    .then(response => response.json()
-    .then(data=>{
-      console.log(data)
-      setData(data.recognised_text)
-    })
-  )},[]);
-
-  //Test End
   const recent = [
     {
       sub: "OOAD",
@@ -183,19 +172,39 @@ export default function Due() {
     // fetch("/recognise",title){
     //   function block
     // }
-    console.log(submitData);
-    axios
-      .post("http://localhost:4000/app/submitAsses", submitData)
-      .then((res) => {
-        // console.log(res.data);
-        // console.log(res.data.message.msg);
-        // console.log("Success back to back to back bro!");
-        // if (res.data.message.result) window.location = "/";
-        // alert(res.data.message.msg);
-        // setUser("");
-        // setMail("");
-        // setPass("");
-      });
+      //Test Start
+
+    const ans=["capto.png" , "filename.png" , "filename.jpg"]
+  // useEffect(() =>{
+    fetch("/recognised",{
+      'method':'POST',
+       headers : {
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({ans})
+    })
+    .then(response => response.json()
+    .then(data=>{
+      console.log(data)
+      setData(data.recognised_text)
+      setData(data.uploads)
+    }))
+  // )},[]);
+
+  //Test End
+    // console.log(submitData);
+    // axios
+    //   .post("http://localhost:4000/app/submitAsses", submitData)
+    //   .then((res) => {
+    //     // console.log(res.data);
+    //     // console.log(res.data.message.msg);
+    //     // console.log("Success back to back to back bro!");
+    //     // if (res.data.message.result) window.location = "/";
+    //     // alert(res.data.message.msg);
+    //     // setUser("");
+    //     // setMail("");
+    //     // setPass("");
+    //   });
     setReady(true);
   };
 
