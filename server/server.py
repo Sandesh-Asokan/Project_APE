@@ -74,9 +74,9 @@ for i in range(len(uploads)):
 # #Provide marks
 
 #  Members API Route
-@app.route("/members")
+@app.route("/recognised")
 def members():
-    return {"members": [recogText.replace('\n', ' | '),"Member2", "Member3"]}
+    return {"recognized text": [recogText.replace('\n', ' ')]}
     # value = request.args.get('key')
 
 if __name__ == "__main__":
