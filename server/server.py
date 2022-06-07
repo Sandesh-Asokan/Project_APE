@@ -21,24 +21,36 @@ def recText(url):
 # count=0
 # keywords=["AUTOMATED", "EVALUATION","MAYA ANGELOU"]
 
-uploads=["capto.png" , "filename.png" , "filename.jpg"]
-recogText=' '
-for i in range(len(uploads)):
-    info = recText(uploads[i])
-    recogText += info 
+# uploads=["capto.png" , "filename.png" , "filename.jpg"]
+
 
 #  Members API Route
 @app.route("/recognised", methods=['GET','POST'])
 def members():
-    # data = request.get_json()
+    data = request.get_json()
 
-    upload=data['ans']
-    keys = data['keys']
+    upload=data['answer']
+    keys = data['keywords']
+
+    recogText=' '
+    for i in range(len(upload)):
+        info = recText(upload[i])
+        recogText += info 
+
+    # total=len(recogText.split())
+    count = 0
+    for k in keys.split(','):
+        if(recogText.count(k)!=0):
+        # mark+=1/len(keywords)
+            count+=1
+    mark=round(count/len(keys.split(',')),1)
+    marks = mark * 5
 
     return {
-        "recognized_text": [recogText.replace('\n', ' ')],
+        "recognized_text": [recogText.replace('\n','')],
         "upload" : upload,
-        "keys" : keys
+        "keys" : keys.split(','),
+        "marks" : marks
     }
     
 

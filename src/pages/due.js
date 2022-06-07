@@ -236,32 +236,62 @@ export default function Due() {
   }, []);
 
   const handleSubmit = () => {
+    // {
+    //     sub: "OOAD Assigment 3",
+    //     task: "Assigment 3",
+    //     date: 23,
+    //     qna: [
+    //       { id: 1, ques: "How would this project help us?", ans: [] },
+    //       { id: 2, ques: "What is purpose of APE project?", ans: [] },
+    //       { id: 3, ques: "Why Planet earth is rotating?", ans: [] },
+    //     ],
+    //   },
+    // console.log(title.qna[0])
+    title.qna.forEach((ab) => {
+      console.log(ab.ans);
+      // const ans = [
+      //   "capto.png",
+      //   "filename.png",
+      //   "filename.jpg",
+      //   "capto.png",
+      //   "filename.png",
+      //   "filename.jpg",
+      // ];
+      // const keys = [
+      //   "VIKRAM",
+      //   "KAITHI",
+      //   "BETTER",
+      //   "THAN",
+      //   "SANDESH",
+      //   "Neptune",
+      //   "James",
+      // ];
+      // useEffect(() =>{
+      const answer = ab.ans;
+      const keywords = ab.words;
+      fetch("/recognised", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ answer, keywords }),
+      }).then((response) =>
+        response
+          .json()
+          .then((data) => {
+            console.log(ab.id, data);
+            // setData(data.recognised_text);
+            // setData(data.uploads);
+          })
+          .catch((err) => console.log(err))
+      );
+    });
     const submitData = {
       user: "Surya",
       date: "Jun 9",
       data: title,
     };
 
-
-    const ans = ["capto.png", "filename.png", "filename.jpg","capto.png", "filename.png", "filename.jpg"];
-    const keys= ["VIKRAM" , "KAITHI" , "BETTER" , "THAN" ,"SANDESH" ,"Neptune","James"]
-    // useEffect(() =>{
-    fetch("/recognised", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ans,keys }),
-    }).then((response) =>
-      response
-        .json()
-        .then((data) => {
-          console.log(data);
-          // setData(data.recognised_text);
-          // setData(data.uploads);
-        })
-        .catch((err) => console.log(err))
-    );
     // fetch("/recognise",title){
     //   function block
     // }
@@ -431,7 +461,7 @@ export default function Due() {
                 // sample.push(URL.createObjectURL(e.target.files[0]));
                 sample.push(e.target.files[0].name);
                 dum.qna[ind].ans = sample;
-                console.log(dum.qna[ind].ans);
+                // console.log(dum.qna[ind].ans);
                 setTitle(dum);
               }}
             />
