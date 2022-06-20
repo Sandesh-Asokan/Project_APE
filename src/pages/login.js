@@ -47,6 +47,8 @@ function Login() {
       };
       dispatch(login(dispatchData));
 
+      console.log(log);
+
       axios.post("http://localhost:4000/app/login", log).then((res) => {
         console.log(res.data);
         if (res.data.username) {

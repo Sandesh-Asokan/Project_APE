@@ -14,8 +14,8 @@ app = Flask(__name__)
 
 #Text recognition Function
 def recText(url):
-    # urllib.request.urlretrieve(url, "filename.jpg")
-    text = pytesseract.image_to_string(Image.open(url))
+    urllib.request.urlretrieve(url, "Recognise.jpg")
+    text = pytesseract.image_to_string(Image.open("Recognise.jpg"))
     return text
 
 # count=0
@@ -31,6 +31,7 @@ def members():
 
     upload=data['answer']
     keys = data['keywords']
+    # urls = data['imgData']
 
     recogText=' '
     for i in range(len(upload)):

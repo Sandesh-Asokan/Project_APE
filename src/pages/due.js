@@ -17,6 +17,7 @@ export default function Due() {
   const [title, setTitle] = useState({});
   const [sum, setSum] = useState({});
   const [data, setData] = useState({});
+  const [imgData, setImgData] = useState([]);
   const [evaledData, setEvaledData] = useState({});
 
   const { loggedIn, user, role } = useSelector((state) => state.user);
@@ -229,6 +230,7 @@ export default function Due() {
   }, []);
 
   useEffect(() => console.log(recent), [recent]);
+  // useEffect(() => console.log(imgData), [imgData]);
   useEffect(() => {
     axios
       .get("http://localhost:4000/app/submitAsses")
@@ -297,6 +299,7 @@ export default function Due() {
       // useEffect(() =>{
       const answer = ab.ans;
       const keywords = ab.words;
+      // console.log(index, answer);
       await fetch("/recognised", {
         method: "POST",
         headers: {
@@ -467,6 +470,44 @@ export default function Due() {
   };
 
   const Upload = () => {
+    const handleImageChange = (e, ind) => {
+      // setError(false);
+      // const selected = e.target.files[0];
+      // const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/jpg"];
+      // if (selected && ALLOWED_TYPES.includes(selected.type)) {
+      //   let reader = new FileReader();
+      //   reader.onload = () => {
+      //     // setImgPreview(reader.result);
+      //     console.log(reader.result);
+      //     setImgData([...imgData, reader.result]);
+      //   };
+      //   reader.readAsDataURL(selected);
+      // } else {
+      //   // setError(true);
+      // }
+      const selected = e.target.files[0];
+      let reader = new FileReader();
+      reader.onload = () => {
+        // setImgPreview(reader.result);
+        console.log(reader.result);
+        setImgData([...imgData, reader.result]);
+        let dum = title;
+        // console.log(URL.createObjectURL(e.target.files[0]));
+
+        let sample;
+        if (dum.qna[ind].ans) {
+          sample = [...dum.qna[ind].ans];
+        } else {
+          sample = [];
+        }
+        // sample.push(URL.createObjectURL(e.target.files[0]));
+        sample.push(reader.result);
+        dum.qna[ind].ans = sample;
+        // console.log("SAMPLE", sample);
+        setTitle(dum);
+      };
+      reader.readAsDataURL(selected);
+    };
     const d = new Date(title.assesDue);
     const postedDate = d.getDate();
     const postedMonth = months[d.getMonth()];
@@ -509,19 +550,8 @@ export default function Due() {
                 className="d-none"
                 accept="image/*"
                 onChange={(e) => {
-                  let dum = title;
-                  // console.log(URL.createObjectURL(e.target.files[0]));
-                  let sample;
-                  if (dum.qna[ind].ans) {
-                    sample = [...dum.qna[ind].ans];
-                  } else {
-                    sample = [];
-                  }
-                  // sample.push(URL.createObjectURL(e.target.files[0]));
-                  sample.push(e.target.files[0].name);
-                  dum.qna[ind].ans = sample;
-                  // console.log(dum.qna[ind].ans);
-                  setTitle(dum);
+                  handleImageChange(e, ind);
+
                   // let ar=title;
                   // ;
                   // setLoad(ar);
